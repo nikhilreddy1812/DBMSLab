@@ -1,0 +1,214 @@
+Enter user-name: A077@db2021
+Enter password:
+
+Connected to:
+Oracle Database 11g Release 11.2.0.1.0 - Production
+
+SQL> SELECT*FROM TAB;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+UNIV                           TABLE
+STU_MARKS                      TABLE
+STUDENT9                       TABLE
+STUDENT8                       TABLE
+STUDENT7                       TABLE
+STUDENT4                       TABLE
+STUDENT10                      TABLE
+STUDENT                        TABLE
+STU11                          TABLE
+STU10                          TABLE
+STU1                           TABLE
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+STU                            TABLE
+ORDERS                         TABLE
+EMP                            TABLE
+DEPT                           TABLE
+DEPARTMENT                     TABLE
+CUSTOMER                       TABLE
+CSE_STUDENTS                   VIEW
+COURSE                         TABLE
+COLLEGE                        TABLE
+
+20 rows selected.
+
+SQL> DROP TABLE CUSTOMER;
+
+Table dropped.
+
+SQL> CREATE TABLE CUSTOMER(
+  2  CUST_ID NUMBER(5) PRIMARY KEY,
+  3  CUST_NAME VARCHAR2(25),
+  4  CITY VARCHAR2(20),
+  5  PHONE NUMBER(12),
+  6  BALANCE NUMBER(10)
+  7  );
+
+Table created.
+
+SQL> DESC CUSTOMER;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ CUST_ID                                   NOT NULL NUMBER(5)
+ CUST_NAME                                          VARCHAR2(25)
+ CITY                                               VARCHAR2(20)
+ PHONE                                              NUMBER(12)
+ BALANCE                                            NUMBER(10)
+
+SQL> INSERT INTO CUSTOMER VALUES(101,'SAMHI','VELLORE',9492011111,80000);
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMER VALUES(102,'SINDHU','KANCHI',6305922222,90000);
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMER VALUES(103,'LIKITHA','VELLORE',7305433333,75000);
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMER VALUES(104,'PRASANNA','CHENNAI',7305488888,89000);
+
+1 row created.
+
+SQL> SELECT*FROM CUSTOMER;
+
+   CUST_ID CUST_NAME                 CITY                      PHONE    BALANCE
+---------- ------------------------- -------------------- ---------- ----------
+       101 SAMHI                     VELLORE              9492011111      80000
+       102 SINDHU                    KANCHI               6305922222      90000
+       103 LIKITHA                   VELLORE              7305433333      75000
+       104 PRASANNA                  CHENNAI              7305488888      89000
+
+SQL> UPDATE CUSTOMER SET BALANCE=75000 WHERE CUST_ID=102;
+
+1 row updated.
+
+SQL> SELECT*FROM CUSTOMER;
+
+   CUST_ID CUST_NAME                 CITY                      PHONE    BALANCE
+---------- ------------------------- -------------------- ---------- ----------
+       101 SAMHI                     VELLORE              9492011111      80000
+       102 SINDHU                    KANCHI               6305922222      75000
+       103 LIKITHA                   VELLORE              7305433333      75000
+       104 PRASANNA                  CHENNAI              7305488888      89000
+
+SQL> DELETE FROM CUSTOMER WHERE CITY='VELLORE';
+
+2 rows deleted.
+
+SQL> SELECT*FROM CUSTOMER;
+
+   CUST_ID CUST_NAME                 CITY                      PHONE    BALANCE
+---------- ------------------------- -------------------- ---------- ----------
+       102 SINDHU                    KANCHI               6305922222      75000
+       104 PRASANNA                  CHENNAI              7305488888      89000
+
+SQL> SELECT*FROM CUSTOMER WHERE CITY='CHENNAI';
+
+   CUST_ID CUST_NAME                 CITY                      PHONE    BALANCE
+---------- ------------------------- -------------------- ---------- ----------
+       104 PRASANNA                  CHENNAI              7305488888      89000
+
+SQL> SELECT*FROM CUSTOMER WHERE BALANCE>60000;
+
+   CUST_ID CUST_NAME                 CITY                      PHONE    BALANCE
+---------- ------------------------- -------------------- ---------- ----------
+       102 SINDHU                    KANCHI               6305922222      75000
+       104 PRASANNA                  CHENNAI              7305488888      89000
+
+SQL> CREATE TABLE BRANCH(
+  2  BRANCH_ID NUMBER(5) PRIMARY KEY,
+  3  BRANCH_NAME VARCHAR2(10)
+  4  );
+
+Table created.
+
+SQL> DESC BRANCH;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ BRANCH_ID                                 NOT NULL NUMBER(5)
+ BRANCH_NAME                                        VARCHAR2(10)
+
+SQL> CREATE TABLE ACCOUNT(
+  2  ACC_NO NUMBER(5) PRIMARY KEY,
+  3  HOLDER_NAME VARCHAR2(30) NOT NULL,
+  4  EMAIL VARCHAR2(30) UNIQUE,
+  5  MIN_BALANCE NUMBER(10) CHECK (MIN_BALANCE>= 1000),
+  6  BRANCH_ID NUMBER,
+  7  FOREIGN KEY (BRANCH_ID) REFERENCES BRANCH(BRANCH_ID)
+  8  );
+
+Table created.
+
+SQL> SELECT*FROM ACCOUNT;
+
+no rows selected
+
+SQL> DESC ACCOUNT;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ACC_NO                                    NOT NULL NUMBER(5)
+ HOLDER_NAME                               NOT NULL VARCHAR2(30)
+ EMAIL                                              VARCHAR2(30)
+ MIN_BALANCE                                        NUMBER(10)
+ BRANCH_ID                                          NUMBER
+
+SQL> INSERT INTO BRANCH VALUES(101,'SBI');
+
+1 row created.
+
+SQL> INSERT INTO BRANCH VALUES(102,'HDFC');
+
+1 row created.
+
+SQL> INSERT INTO ACCOUNT VALUES(01,'SAMHI','SAMHI@GMAIL.COM',80000,101);
+
+1 row created.
+
+SQL> INSERT INTO ACCOUNT VALUES(02,'NICK','NICK@GMAIL.COM',90000,102);
+
+1 row created.
+
+SQL> SELECT*FROM BRANCH;
+
+ BRANCH_ID BRANCH_NAM
+---------- ----------
+       101 SBI
+       102 HDFC
+
+SQL> SELECT*FROM ACCOUNT;
+
+    ACC_NO HOLDER_NAME                    EMAIL
+---------- ------------------------------ ------------------------------
+MIN_BALANCE  BRANCH_ID
+----------- ----------
+         1 SAMHI                          SAMHI@GMAIL.COM
+      80000        101
+
+         2 NICK                           NICK@GMAIL.COM
+      90000        102
+
+
+SQL> INSERT INTO ACCOUNT VALUES(03,NULL,'ABC@GMAIL.COM',80000,101);
+INSERT INTO ACCOUNT VALUES(03,NULL,'ABC@GMAIL.COM',80000,101)
+                              *
+ERROR at line 1:
+ORA-01400: cannot insert NULL into ("A077"."ACCOUNT"."HOLDER_NAME")
+
+
+SQL> INSERT INTO ACCOUNT VALUES(04,'JULIE','SAMHI@GMAIL.COM',90000,102);
+INSERT INTO ACCOUNT VALUES(04,'JULIE','SAMHI@GMAIL.COM',90000,102)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (A077.SYS_C0035924) violated
+
+
+SQL> INSERT INTO ACCOUNT VALUES(05,'SARA','SARA@GMAIL.COM',90000,104);
+INSERT INTO ACCOUNT VALUES(05,'SARA','SARA@GMAIL.COM',90000,104)
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (A077.SYS_C0035925) violated - parent key not
+found
